@@ -1,0 +1,27 @@
+% ==========================================================
+% Email Spam Classifier | AICA (102120301) Prolog Mini Project
+% ==========================================================
+% ---------- Knowledge base: words treated as spam ----------
+spam_word(free).
+spam_word(prize).
+spam_word(win).
+spam_word(offer).
+spam_word(lottery).
+spam_word(cash).
+spam_word(winner).
+spam_word(urgent).
+% ---------- Rule 1: spam if ANY word is a spam word ----------
+spam(Email) :-
+member(Word, Email),
+spam_word(Word),
+!.
+% ---------- Rule 2: negation as failure ----------
+not_spam(Email) :-
+\+ spam(Email).
+% ---------- Extension: show which spam words were found ----------
+spam_words_found(Email, Found) :-
+findall(W,
+(member(W, Email), spam_word(W)), Found).
+% ---------- Extension: label an email ----------
+classify(Email, spam) :- spam(Email), !.
+classify(_Email, not_spam).
